@@ -47,20 +47,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // determines the effective ping of a player, taking ping charity into account
 static REAL se_GetPing( ePlayerNetID * player )
 {
-    REAL peer_ping=0;
     REAL my_ping=0;
 
-    if (bool(player) && player->Owner()!=::sn_myNetID)
-    {
-        if (sn_GetNetState()!=nSERVER)
-            peer_ping+=player->ping;
-        else
-            peer_ping+=sn_Connections[player->Owner()].ping;
-    }
     if (sn_GetNetState()!=nSERVER && (!player || player->Owner()!=::sn_myNetID))
         my_ping+=sn_Connections[0].ping;
 
-    REAL ping = (peer_ping+my_ping)*.5;
+    REAL ping = my_ping;
 
     if (ping>my_ping+sn_pingCharityServer*.001)
         ping=my_ping+sn_pingCharityServer*.001;
